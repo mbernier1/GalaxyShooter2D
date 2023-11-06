@@ -47,6 +47,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 4
+  scoreText: {fileID: 6195986892021674033, guid: 2bb251b11b186b5448f8e7e29ba55129,
+    type: 3}
 --- !u!212 &6157948383353113788
 SpriteRenderer:
   m_ObjectHideFlags: 0
