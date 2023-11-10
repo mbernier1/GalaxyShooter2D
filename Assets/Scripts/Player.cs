@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
@@ -13,16 +14,29 @@ public class Player : MonoBehaviour
     private GameObject _laserContainer;
     [SerializeField]
     private float _fireRate = 0.15f;
-    private float _canFire = -1.0f;
     [SerializeField]
     private int _lives = 3;
+    [SerializeField]
+    private GameObject _tripleShotPrefab;
+
+
+    private float _canFire = -1.0f;
     private SpawnManager _spawnManager;
+    [SerializeField]
+    private bool _isTripleShotActive = false;
+
+
+
+    [SerializeField]
+    private Text _scoreText;
+    private int _score;
+
 
 
     // Start is called before the first frame update
     void Start()
     {
-        transform.position = new Vector3(2, 5, 0);
+        transform.position = new Vector3(0, 0, 0);
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
         if(_spawnManager == null )
         {
@@ -63,13 +77,13 @@ public class Player : MonoBehaviour
         //this is a more optimized way of setting boundaries for where the player will stop
         //transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, -3.8f, 0), 0);
 
-        if (transform.position.x > 13.5f)
+        if (transform.position.x > 11.1f)
         {
-            transform.position = new Vector3(-13.5f, transform.position.y, 0);
+            transform.position = new Vector3(-11.1f, transform.position.y, 0);
         }
-        else if (transform.position.x < -13.5f)
+        else if (transform.position.x < -11.1f)
         {
-            transform.position = new Vector3(13.5f, transform.position.y, 0);
+            transform.position = new Vector3(11.1f, transform.position.y, 0);
 
         }
     }
@@ -77,7 +91,18 @@ public class Player : MonoBehaviour
     void FireLaser()
     {
         _canFire = Time.time + _fireRate;
-        Instantiate(_laserPreFab, transform.position + new Vector3(0, 1.05f, 0), Quaternion.identity);
+        
+        if(_isTripleShotActive == true)
+        {
+            Instantiate(_tripleShotPrefab, transform.position, Quaternion.identity);
+            //Instantiate(_tripleShotPreFab, transform.position + new Vector3(-0.777f, 1.05f, 0), Quaternion.identity);
+            //Instantiate(_tripleShotPreFab, transform.position + new Vector3(0.777f, 1.05f, 0), Quaternion.identity);
+
+        }
+        else
+        {
+            Instantiate(_laserPreFab, transform.position + new Vector3(0, 1.05f, 0), Quaternion.identity);
+        }
     }
 
     public void Damage()
@@ -89,5 +114,27 @@ public class Player : MonoBehaviour
             _spawnManager.OnPlayerDeath();
             Destroy(this.gameObject);
         }
+    }
+
+    public void TripleShotActive()
+    { 
+        _isTripleShotActive = true;
+        StartCoroutine(TripleShotPowerDownRoutine());
+    }
+
+    IEnumerator TripleShotPowerDownRoutine()
+    {
+        while(_isTripleShotActive == true) 
+        { 
+            yield return new WaitForSeconds(5.0f);
+            _isTripleShotActive = false;
+        }
+    }
+
+    public void PlayerScore()
+    {
+        _score += 1;
+        //Scoring.totalScore += 1;
+        _scoreText.text = "Score: " + _score;
     }
 }

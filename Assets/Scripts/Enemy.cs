@@ -1,17 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class Enemy : MonoBehaviour
 {
     [SerializeField]
     private float _speed = 4.0f;
-    public Text scoreText;
 
     void Start()
     {
-        scoreText.text = "Score: " + Scoring.totalScore;
+
     }
 
     void Update()
@@ -28,11 +26,10 @@ public class Enemy : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
         Debug.Log("Hit: " + other.transform.name);
-
+        Player player = GameObject.Find("Player").GetComponent<Player>();
 
         if (other.tag == "Player")
         {
-            Player player = other.transform.GetComponent<Player>();
             if (player != null)  
             {
                 player.Damage();
@@ -42,8 +39,12 @@ public class Enemy : MonoBehaviour
         }
         else if(other.tag == "Laser")
         {
-            Scoring.totalScore += 1;
-            scoreText.text = "Score: " + Scoring.totalScore;
+            if(player != null)
+            {
+                Debug.Log("player score about to get called");
+                player.PlayerScore();
+                Debug.Log("player score updated");
+            }
 
             Destroy(other.gameObject);
             Destroy(this.gameObject);

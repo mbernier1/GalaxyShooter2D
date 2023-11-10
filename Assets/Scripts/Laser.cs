@@ -9,7 +9,7 @@ public class Laser : MonoBehaviour
 
     void Update()
     {
-        Vector3 direction = new Vector3(transform.position.x, 1, 0);
+        //Vector3 direction = new Vector3(transform.position.x, 1, 0);
 
         transform.Translate(Vector3.up * _speed * Time.deltaTime);
 
