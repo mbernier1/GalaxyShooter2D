@@ -26,25 +26,21 @@ public class Player : MonoBehaviour
     private bool _isTripleShotActive = false;
 
 
-
     [SerializeField]
     private Text _scoreText;
     private int _score;
 
-
-
-    // Start is called before the first frame update
     void Start()
     {
         transform.position = new Vector3(0, 0, 0);
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
+
         if(_spawnManager == null )
         {
             Debug.LogError("The Spawn Manager is NULL");
         }
     }
 
-    // Update is called once per frame
     void Update()
     {
         CalculateMovement();
@@ -63,7 +59,6 @@ public class Player : MonoBehaviour
         Vector3 direction = new Vector3(horizontalInput, verticalInput, 0);
 
         transform.Translate(direction * _speed * Time.deltaTime);
-
 
         if (transform.position.y >= 0)
         {
@@ -84,7 +79,6 @@ public class Player : MonoBehaviour
         else if (transform.position.x < -11.1f)
         {
             transform.position = new Vector3(11.1f, transform.position.y, 0);
-
         }
     }
 
@@ -95,9 +89,6 @@ public class Player : MonoBehaviour
         if(_isTripleShotActive == true)
         {
             Instantiate(_tripleShotPrefab, transform.position, Quaternion.identity);
-            //Instantiate(_tripleShotPreFab, transform.position + new Vector3(-0.777f, 1.05f, 0), Quaternion.identity);
-            //Instantiate(_tripleShotPreFab, transform.position + new Vector3(0.777f, 1.05f, 0), Quaternion.identity);
-
         }
         else
         {
@@ -134,7 +125,6 @@ public class Player : MonoBehaviour
     public void PlayerScore()
     {
         _score += 1;
-        //Scoring.totalScore += 1;
         _scoreText.text = "Score: " + _score;
     }
 }
