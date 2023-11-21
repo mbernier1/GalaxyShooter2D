@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using JetBrains.Annotations;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,6 +7,15 @@ public class Powerup : MonoBehaviour
 {
     [SerializeField]
     private float _speed = 3.0f;
+    [SerializeField]
+    private int _powerupID;
+
+    private Player _player;
+
+    private void Start()
+    {
+        _player = GameObject.Find("Player").GetComponent<Player>();
+    }
 
     void Update()
     {
@@ -21,10 +31,23 @@ public class Powerup : MonoBehaviour
     {
         if(other.tag == "Player")
         {
-            Player player = GameObject.Find("Player").GetComponent<Player>();
-            if(player != null)
+            if(_player != null)
             {
-                player.TripleShotActive();
+                switch(_powerupID)
+                {
+                    case 0:
+                        _player.TripleShotActive();
+                        break;
+                    case 1:
+                        _player.SpeedBoostActive();
+                        break;
+                    case 2:
+                        _player.ShieldActive();
+                        break;
+                    default:
+                        Debug.Log("default case");
+                        break;
+                }
             }
             
             Destroy(this.gameObject);

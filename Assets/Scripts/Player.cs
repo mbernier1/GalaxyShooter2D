@@ -9,35 +9,45 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float _speed = 3.5f;
     [SerializeField]
-    private GameObject _laserPreFab;
+    private float _speedBoost = 2.0f; 
     [SerializeField]
-    private GameObject _laserContainer;
+    private GameObject _laserPreFab;
     [SerializeField]
     private float _fireRate = 0.15f;
     [SerializeField]
     private int _lives = 3;
     [SerializeField]
     private GameObject _tripleShotPrefab;
+    [SerializeField]
+    private GameObject _shieldVisualizer;
+    
+    private bool _isTripleShotActive = false;
+    private bool _isSpeedBoostActive = false;
+    private bool _isShieldActive = false;
+    
+    [SerializeField]
+    private Text _scoreText;
 
 
     private float _canFire = -1.0f;
     private SpawnManager _spawnManager;
-    [SerializeField]
-    private bool _isTripleShotActive = false;
-
-
-    [SerializeField]
-    private Text _scoreText;
+    private UIManager _uiManager;
     private int _score;
 
     void Start()
     {
         transform.position = new Vector3(0, 0, 0);
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
+        _uiManager = GameObject.Find("Canvas").GetComponentInParent<UIManager>();
 
         if(_spawnManager == null )
         {
             Debug.LogError("The Spawn Manager is NULL");
+        }
+
+        if (_uiManager == null)
+        {
+            Debug.LogError("The UI Manager is NULL");
         }
     }
 
@@ -59,7 +69,7 @@ public class Player : MonoBehaviour
         Vector3 direction = new Vector3(horizontalInput, verticalInput, 0);
 
         transform.Translate(direction * _speed * Time.deltaTime);
-
+        
         if (transform.position.y >= 0)
         {
             transform.position = new Vector3(transform.position.x, 0, 0);
@@ -98,12 +108,23 @@ public class Player : MonoBehaviour
 
     public void Damage()
     {
-        _lives -= 1;
-
-        if (_lives < 1) 
+        if (_isShieldActive == true)
         {
-            _spawnManager.OnPlayerDeath();
-            Destroy(this.gameObject);
+            _isShieldActive = false;
+            _shieldVisualizer.SetActive(false);
+            return;
+        }
+        else
+        {
+            _lives -= 1;
+
+            _uiManager.UpdateLives(_lives);
+
+            if (_lives < 1)
+            {
+                _spawnManager.OnPlayerDeath();
+                Destroy(this.gameObject);
+            }
         }
     }
 
@@ -122,9 +143,32 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void PlayerScore()
+    public void SpeedBoostActive()
     {
-        _score += 1;
-        _scoreText.text = "Score: " + _score;
+        _isSpeedBoostActive = true;
+        _speed *= _speedBoost;
+        StartCoroutine(SpeedBoostPowerDownRoutine());
+    }
+
+    IEnumerator SpeedBoostPowerDownRoutine()
+    {
+        while (_isSpeedBoostActive == true)
+        {
+            yield return new WaitForSeconds(5.0f);
+            _isSpeedBoostActive = false;
+            _speed /= _speedBoost;
+        }
+    }
+
+    public void ShieldActive()
+    {
+        _isShieldActive = true;
+        _shieldVisualizer.SetActive(true);
+    }
+
+    public void PlayerScore(int points)
+    {
+        _score += points;
+        _uiManager.UpdateScore(_score);
     }
 }
