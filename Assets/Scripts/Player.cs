@@ -24,10 +24,6 @@ public class Player : MonoBehaviour
     private bool _isTripleShotActive = false;
     private bool _isSpeedBoostActive = false;
     private bool _isShieldActive = false;
-    
-    [SerializeField]
-    private Text _scoreText;
-
 
     private float _canFire = -1.0f;
     private SpawnManager _spawnManager;
