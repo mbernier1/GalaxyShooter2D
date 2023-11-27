@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
@@ -13,15 +14,23 @@ public class UIManager : MonoBehaviour
     private Sprite[] _livesSprites;
     [SerializeField]
     private Text _gameOverText;
+    [SerializeField]
+    private Text _restartLevelText;
 
-    // Start is called before the first frame update
+    private GameManager _gameManager;
+
     void Start()
     {
         _scoreText.text = "Score: " + 0;
         _gameOverText.gameObject.SetActive(false);
+        _restartLevelText.gameObject.SetActive(false);
+        _gameManager = GameObject.Find("Game_Manager").GetComponent<GameManager>();
+        if (_gameManager == null )
+        {
+            Debug.LogError("GameManager is NULL.");
+        }
     }
 
-    // Update is called once per frame
     void Update()
     {
         
@@ -37,11 +46,18 @@ public class UIManager : MonoBehaviour
         _livesImg.sprite = _livesSprites[currentLives];
 
         if(currentLives == 0) 
-        { 
-            _gameOverText.gameObject.SetActive(true);
-            StartCoroutine(GameOverFlickerRoutine());
+        {
+            GameOverSequence();
         }
     }
+    public void GameOverSequence()
+    {
+        _gameManager.GameOver();
+        _gameOverText.gameObject.SetActive(true);
+        _restartLevelText.gameObject.SetActive(true);
+        StartCoroutine(GameOverFlickerRoutine());
+    }
+
 
     IEnumerator GameOverFlickerRoutine() 
     { 
