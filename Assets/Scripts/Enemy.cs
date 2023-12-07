@@ -20,7 +20,7 @@ public class Enemy : MonoBehaviour
         _animator = GetComponent<Animator>();
         if( _animator == null )
         {
-            Debug.LogError("Animitaor id NULL");
+            Debug.LogError("Animitaor is NULL");
         }
     }
 
