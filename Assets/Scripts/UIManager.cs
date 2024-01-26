@@ -31,11 +31,6 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    void Update()
-    {
-        
-    }
-
     public void UpdateScore(int playerScore)
     {
         _scoreText.text = "Score: " + playerScore.ToString();
@@ -57,7 +52,6 @@ public class UIManager : MonoBehaviour
         _restartLevelText.gameObject.SetActive(true);
         StartCoroutine(GameOverFlickerRoutine());
     }
-
 
     IEnumerator GameOverFlickerRoutine() 
     { 

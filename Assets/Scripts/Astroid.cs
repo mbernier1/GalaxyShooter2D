@@ -14,6 +14,7 @@ public class Astroid : MonoBehaviour
     {
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
     }
+
     void Update()
     {
         transform.Rotate(Vector3.forward * _rotateSpeed * Time.deltaTime);

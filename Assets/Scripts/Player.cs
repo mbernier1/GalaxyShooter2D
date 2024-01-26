@@ -22,6 +22,8 @@ public class Player : MonoBehaviour
     private GameObject _leftEngine;
     [SerializeField]
     private GameObject _rightEngine;
+    [SerializeField]
+    private float _thrusterSpeed;
 
     [SerializeField]
     private AudioClip _laserSoundClip;
@@ -78,10 +80,19 @@ public class Player : MonoBehaviour
     {
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
+        
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            _thrusterSpeed = 1.5f;
+        }
+        else
+        {
+            _thrusterSpeed = 1.0f;
+        }
 
         Vector3 direction = new Vector3(horizontalInput, verticalInput, 0);
 
-        transform.Translate(direction * _speed * Time.deltaTime);
+        transform.Translate(direction * _speed * Time.deltaTime * _thrusterSpeed);
         
         if (transform.position.y >= 0)
         {
@@ -188,6 +199,27 @@ public class Player : MonoBehaviour
     {
         _isShieldActive = true;
         _shieldVisualizer.SetActive(true);
+    }
+
+    public void HealthGain()
+    {
+        //when 3 or more live just destroy the heart
+
+        if (_lives == 1) 
+        { 
+            _rightEngine.SetActive(false);
+        }
+        else if ( _lives == 2 ) 
+        {
+            _leftEngine.SetActive(false);
+        }
+        
+        if ( _lives <= 2 )
+        {
+            _lives += 1;
+        }
+
+        _uiManager.UpdateLives(_lives);
     }
 
     public void PlayerScore(int points)

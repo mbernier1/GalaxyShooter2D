@@ -156,6 +156,7 @@ MonoBehaviour:
   - {fileID: 1941110936775053461, guid: e3fdd44702da7814eaf49ebdc124b924, type: 3}
   - {fileID: 5016362105515734668, guid: 3a61c513e58354f4490bc9fa3aad3c37, type: 3}
   - {fileID: 6687441091560098852, guid: 82ca008fd3486494381affba9011e9cb, type: 3}
+  - {fileID: 5351956051576943063, guid: 2556543ac65d26540a66bf2a6dc96173, type: 3}
   _enemyContainer: {fileID: 1248898348}
 --- !u!4 &8504284
 Transform:
@@ -1221,6 +1222,7 @@ MonoBehaviour:
   _shieldVisualizer: {fileID: 667469176}
   _leftEngine: {fileID: 1235669736}
   _rightEngine: {fileID: 835797455}
+  _thrusterSpeed: 5
   _laserSoundClip: {fileID: 8300000, guid: 75676f361bdfeaf41a46623e95df3dbc, type: 3}
   _audioSource: {fileID: 1559893094}
 --- !u!212 &1559893091
