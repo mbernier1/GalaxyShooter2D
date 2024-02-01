@@ -33,11 +33,13 @@ public class Player : MonoBehaviour
     private bool _isTripleShotActive = false;
     private bool _isSpeedBoostActive = false;
     private bool _isShieldActive = false;
+    private bool _hasAmmo = true;
 
     private float _canFire = -1.0f;
     private SpawnManager _spawnManager;
     private UIManager _uiManager;
     private int _score;
+    public int _ammo = 15;
 
     void Start()
     {
@@ -118,18 +120,32 @@ public class Player : MonoBehaviour
 
     void FireLaser()
     {
-        _canFire = Time.time + _fireRate;
         
-        if(_isTripleShotActive == true)
-        {
-            Instantiate(_tripleShotPrefab, transform.position, Quaternion.identity);
-        }
-        else
-        {
-            Instantiate(_laserPreFab, transform.position + new Vector3(0, 1.05f, 0), Quaternion.identity);
-        }
+            if (_ammo <= 15 && _ammo > 0)
+            {
+                _canFire = Time.time + _fireRate;
 
-        _audioSource.Play();
+                if (_isTripleShotActive == true)
+                {
+                    Instantiate(_tripleShotPrefab, transform.position, Quaternion.identity);
+                }
+                else
+                {
+                    Instantiate(_laserPreFab, transform.position + new Vector3(0, 1.05f, 0), Quaternion.identity);
+                }
+
+
+                PlayerAmmo();
+                _audioSource.Play();
+
+            }
+            else if (_ammo <= 0)
+            {
+                _canFire = 0;
+                _fireRate = 0;
+            }
+        
+        
     }
 
     public void Damage()
@@ -203,8 +219,6 @@ public class Player : MonoBehaviour
 
     public void HealthGain()
     {
-        //when 3 or more live just destroy the heart
-
         if (_lives == 1) 
         { 
             _rightEngine.SetActive(false);
@@ -226,5 +240,18 @@ public class Player : MonoBehaviour
     {
         _score += points;
         _uiManager.UpdateScore(_score);
+    }
+
+    public void PlayerAmmo()
+    {
+        _ammo -= 1;
+        _uiManager.UpdateAmmo(_ammo);
+    }
+
+    public void IncreaseAmmo()
+    {
+        _ammo += 15;
+        _hasAmmo = true;
+        _uiManager.UpdateAmmo(_ammo);
     }
 }

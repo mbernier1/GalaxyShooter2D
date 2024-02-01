@@ -16,12 +16,15 @@ public class UIManager : MonoBehaviour
     private Text _gameOverText;
     [SerializeField]
     private Text _restartLevelText;
+    [SerializeField]
+    private Text _ammoText;
 
     private GameManager _gameManager;
 
     void Start()
     {
         _scoreText.text = "Score: " + 0;
+        _ammoText.text = "Ammo: " + 15;
         _gameOverText.gameObject.SetActive(false);
         _restartLevelText.gameObject.SetActive(false);
         _gameManager = GameObject.Find("Game_Manager").GetComponent<GameManager>();
@@ -44,6 +47,11 @@ public class UIManager : MonoBehaviour
         {
             GameOverSequence();
         }
+    }
+
+    public void UpdateAmmo(int currentAmmo)
+    {
+        _ammoText.text = "Ammo: " + currentAmmo.ToString();
     }
     public void GameOverSequence()
     {
