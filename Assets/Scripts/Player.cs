@@ -11,7 +11,7 @@ public class Player : MonoBehaviour
     [SerializeField]
     private GameObject _laserPreFab;
     [SerializeField]
-    private float _fireRate = 0.15f;
+    private float _fireRate;
     [SerializeField]
     private int _lives = 3;
     [SerializeField]
@@ -33,13 +33,16 @@ public class Player : MonoBehaviour
     private bool _isTripleShotActive = false;
     private bool _isSpeedBoostActive = false;
     private bool _isShieldActive = false;
-    private bool _hasAmmo = true;
 
     private float _canFire = -1.0f;
     private SpawnManager _spawnManager;
     private UIManager _uiManager;
     private int _score;
     public int _ammo = 15;
+    public SpriteRenderer _ren;
+
+    public int _shieldHits = 3;
+
 
     void Start()
     {
@@ -47,6 +50,7 @@ public class Player : MonoBehaviour
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
         _uiManager = GameObject.Find("Canvas").GetComponentInParent<UIManager>();
         _audioSource = GetComponent<AudioSource>();
+        //_ren = GameObject.Find("Shield").GetComponent<SpriteRenderer>();
 
         if(_spawnManager == null )
         {
@@ -66,6 +70,8 @@ public class Player : MonoBehaviour
         {
             _audioSource.clip = _laserSoundClip;
         }
+
+        
     }
 
     void Update()
@@ -120,41 +126,50 @@ public class Player : MonoBehaviour
 
     void FireLaser()
     {
-        
-            if (_ammo <= 15 && _ammo > 0)
+        if (_ammo > 0)
+        {
+            _fireRate = 0.15f;
+            _canFire = Time.time + _fireRate;
+
+            if (_isTripleShotActive == true)
             {
-                _canFire = Time.time + _fireRate;
-
-                if (_isTripleShotActive == true)
-                {
-                    Instantiate(_tripleShotPrefab, transform.position, Quaternion.identity);
-                }
-                else
-                {
-                    Instantiate(_laserPreFab, transform.position + new Vector3(0, 1.05f, 0), Quaternion.identity);
-                }
-
-
-                PlayerAmmo();
-                _audioSource.Play();
-
+                Instantiate(_tripleShotPrefab, transform.position, Quaternion.identity);
             }
-            else if (_ammo <= 0)
+            else
             {
-                _canFire = 0;
-                _fireRate = 0;
+                Instantiate(_laserPreFab, transform.position + new Vector3(0, 1.05f, 0), Quaternion.identity);
             }
-        
-        
+
+            PlayerAmmo();
+            _audioSource.Play();
+        }
+        else if (_ammo <= 0)
+        {
+            _canFire = 0;
+            _fireRate = 0;
+        }
     }
 
     public void Damage()
     {
         if (_isShieldActive == true)
         {
-            _isShieldActive = false;
-            _shieldVisualizer.SetActive(false);
-            return;
+            _shieldHits -= 1;
+
+            if (_shieldHits == 2)
+            {
+                _ren.GetComponent<SpriteRenderer>().material.color = Color.yellow;
+            }
+            else if(_shieldHits == 1)
+            {
+                _ren.GetComponent<SpriteRenderer>().material.color = Color.red;
+            }
+            else
+            {
+                _isShieldActive = false;
+                _shieldVisualizer.SetActive(false);
+                return;
+            }
         }
         else
         {
@@ -226,6 +241,7 @@ public class Player : MonoBehaviour
         else if ( _lives == 2 ) 
         {
             _leftEngine.SetActive(false);
+
         }
         
         if ( _lives <= 2 )
@@ -251,7 +267,6 @@ public class Player : MonoBehaviour
     public void IncreaseAmmo()
     {
         _ammo += 15;
-        _hasAmmo = true;
         _uiManager.UpdateAmmo(_ammo);
     }
 }

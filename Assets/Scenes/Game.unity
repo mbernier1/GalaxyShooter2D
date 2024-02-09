@@ -157,8 +157,9 @@ MonoBehaviour:
   - {fileID: 5016362105515734668, guid: 3a61c513e58354f4490bc9fa3aad3c37, type: 3}
   - {fileID: 6687441091560098852, guid: 82ca008fd3486494381affba9011e9cb, type: 3}
   - {fileID: 5351956051576943063, guid: 2556543ac65d26540a66bf2a6dc96173, type: 3}
-  - {fileID: 5351956051576943063, guid: 2556543ac65d26540a66bf2a6dc96173, type: 3}
   _enemyContainer: {fileID: 1248898348}
+  _ammoRefillPrefab: {fileID: 2034924792378581993, guid: 75773bb3d09ff864f97fe46eaa95c9c0,
+    type: 3}
 --- !u!4 &8504284
 Transform:
   m_ObjectHideFlags: 0
@@ -1566,6 +1567,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1232120971, guid: 32d08468e17be3a49ac62e27b2173671, type: 3}
+      propertyPath: m_Name
+      value: Ammo_Text
+      objectReference: {fileID: 0}
+    - target: {fileID: 1232120973, guid: 32d08468e17be3a49ac62e27b2173671, type: 3}
+      propertyPath: m_Text
+      value: 'Ammo: '
+      objectReference: {fileID: 0}
     - target: {fileID: 5803917616540454907, guid: 32d08468e17be3a49ac62e27b2173671,
         type: 3}
       propertyPath: m_Name
@@ -1675,6 +1684,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7381164621313018162, guid: 32d08468e17be3a49ac62e27b2173671,
+        type: 3}
+      propertyPath: m_Name
+      value: Score_Text
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32d08468e17be3a49ac62e27b2173671, type: 3}

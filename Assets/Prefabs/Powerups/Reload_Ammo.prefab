@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8766503152654916273}
   - component: {fileID: 667326054925403423}
   - component: {fileID: 8225433960958857629}
+  - component: {fileID: 8670856781015479536}
   m_Layer: 0
   m_Name: Reload_Ammo
   m_TagString: Ammo
@@ -134,9 +135,24 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &8670856781015479536
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2034924792378581993}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb20d7fbffc58bd4a9ed0ed0c947f546, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _speed: 3
+  _powerupID: 4
+  _clip: {fileID: 8300000, guid: 5ee343246919d2b4bba63ae629e95494, type: 3}

@@ -53,6 +53,7 @@ public class UIManager : MonoBehaviour
     {
         _ammoText.text = "Ammo: " + currentAmmo.ToString();
     }
+
     public void GameOverSequence()
     {
         _gameManager.GameOver();
