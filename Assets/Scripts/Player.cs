@@ -1,6 +1,8 @@
 ﻿using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static System.Runtime.CompilerServices.RuntimeHelpers;
 
 public class Player : MonoBehaviour
 {
@@ -40,8 +42,9 @@ public class Player : MonoBehaviour
     private int _score;
     public int _ammo = 15;
     public SpriteRenderer _ren;
-
     public int _shieldHits = 3;
+    private Animator _cameraShake;
+    private BoosterController _boosterController;
 
 
     void Start()
@@ -51,8 +54,10 @@ public class Player : MonoBehaviour
         _uiManager = GameObject.Find("Canvas").GetComponentInParent<UIManager>();
         _audioSource = GetComponent<AudioSource>();
         //_ren = GameObject.Find("Shield").GetComponent<SpriteRenderer>();
+        _cameraShake = GameObject.Find("Main Camera").GetComponent<Animator>();
+        _boosterController = GameObject.Find("BoosterBar").GetComponent<BoosterController>();
 
-        if(_spawnManager == null )
+        if (_spawnManager == null )
         {
             Debug.LogError("The Spawn Manager is NULL");
         }
@@ -71,7 +76,10 @@ public class Player : MonoBehaviour
             _audioSource.clip = _laserSoundClip;
         }
 
-        
+        if(_cameraShake == null)
+        {
+            Debug.LogError("Can't find main camera");
+        }
     }
 
     void Update()
@@ -89,14 +97,20 @@ public class Player : MonoBehaviour
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
         
-        if (Input.GetKey(KeyCode.LeftShift))
+        if(_boosterController._booster == 100)
         {
-            _thrusterSpeed = 1.5f;
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+                _thrusterSpeed = 1.5f;
+                _boosterController.UseBooster(0.5f);
+            }
+            else
+            {
+                _thrusterSpeed = 1.0f;
+                _boosterController.FillBooster();
+            }
         }
-        else
-        {
-            _thrusterSpeed = 1.0f;
-        }
+        
 
         Vector3 direction = new Vector3(horizontalInput, verticalInput, 0);
 
@@ -110,9 +124,6 @@ public class Player : MonoBehaviour
         {
             transform.position = new Vector3(transform.position.x, -3.8f, 0);
         }
-
-        //this is a more optimized way of setting boundaries for where the player will stop
-        //transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, -3.8f, 0), 0);
 
         if (transform.position.x > 11.1f)
         {
@@ -152,6 +163,8 @@ public class Player : MonoBehaviour
 
     public void Damage()
     {
+        _cameraShake.SetTrigger("PlayerDamaged");
+
         if (_isShieldActive == true)
         {
             _shieldHits -= 1;
@@ -228,6 +241,7 @@ public class Player : MonoBehaviour
 
     public void ShieldActive()
     {
+        _shieldHits = 3;
         _isShieldActive = true;
         _shieldVisualizer.SetActive(true);
     }

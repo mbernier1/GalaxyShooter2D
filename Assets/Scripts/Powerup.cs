@@ -59,6 +59,9 @@ public class Powerup : MonoBehaviour
                     case 4:
                         _player.IncreaseAmmo();
                         break;
+                    case 5:
+                        _player.IncreaseAmmo();
+                        break;
                     default:
                         Debug.Log("default case");
                         break;
